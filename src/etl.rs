@@ -22,9 +22,9 @@ pub fn read_transactions_from_csv<P:AsRef<Path>>(path:P)->Result<Vec<Transaction
 }
 
 pub fn normalise_users(transactions:Vec<Transaction>)->Vec<Transaction>{
-    let transform = MapTransform::new(|mut transactions:Transaction|{
-        transactions.user = transactions.user.to_lowercase();
-        transactions
+    let transform = MapTransform::new(|mut transaction:Transaction|{
+        transaction.user = transaction.user.to_lowercase();
+        transaction
     });
     let pipeline = Pipeline::new(transform);
     pipeline.run(transactions.into_iter()).collect()
