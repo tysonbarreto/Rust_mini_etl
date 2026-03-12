@@ -9,7 +9,8 @@ fn main()->Result<()>{
     let transactions = etl::read_transactions_from_csv("artifacts/data.csv")?;
     println!("Loaded {} transactions", transactions.len());
 
-    for row in transactions.into_iter(){
+    let transactions = etl::normalise_users(transactions);
+    for row in transactions.iter(){
         print!("{:#?}",row);
     }
     Ok(())

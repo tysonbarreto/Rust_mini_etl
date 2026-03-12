@@ -3,7 +3,7 @@ use std::os::linux::raw;
 use serde::{Deserialize, Serialize};
 
 
-#[derive(Serialize,Deserialize,Clone,Debug,PartialEq,Eq)]
+#[derive(Serialize,Deserialize,Clone,Debug,PartialEq,Eq,Hash)]
 pub enum Category{
     Food,
     Books,
@@ -48,3 +48,5 @@ impl From<RawTransaction> for Transaction{
         }
     }
 }
+
+

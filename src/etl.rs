@@ -3,7 +3,7 @@ use anyhow::{Ok, Result};
 use csv::{self,ReaderBuilder};
 use std::fs::File;
 
-use crate::model::{RawTransaction,Transaction};
+use crate::{model::{RawTransaction,Transaction}, pipeline::{self, MapTransform, Pipeline}};
 
 pub fn read_transactions_from_csv<P:AsRef<Path>>(path:P)->Result<Vec<Transaction>>{
     let file = File::open(path)?;
@@ -19,4 +19,13 @@ pub fn read_transactions_from_csv<P:AsRef<Path>>(path:P)->Result<Vec<Transaction
         transactions.push(transaction_row)
     }
     Ok(transactions)
+}
+
+pub fn normalise_users(transactions:Vec<Transaction>)->Vec<Transaction>{
+    let transform = MapTransform::new(|mut transactions:Transaction|{
+        transactions.user = transactions.user.to_lowercase();
+        transactions
+    });
+    let pipeline = Pipeline::new(transform);
+    pipeline.run(transactions.into_iter()).collect()
 }
